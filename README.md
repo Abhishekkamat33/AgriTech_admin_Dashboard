@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Admin Dashboard
+Overview
+This project is an Admin Dashboard application featuring a modern web interface built using Next.js as the frontend framework and Spring Boot as the backend REST API server. It provides secure user authentication via JWT (JSON Web Tokens) and integrates with Esewa for payment processing.
 
-## Getting Started
+The dashboard allows administrators to manage products, orders, users, and payments efficiently through a responsive and user-friendly interface.
 
-First, run the development server:
+Technologies Used
+Frontend:
 
-```bash
+Next.js (React framework with SSR/SSG)
+
+TypeScript / JavaScript
+
+CSS Framework (e.g., Tailwind CSS, Material UI)
+
+Axios / Fetch for REST API calls
+
+Backend:
+
+Spring Boot (Java) REST API
+
+Spring Security with JWT token-based authentication
+
+JPA / Hibernate ORM for database interaction
+
+PostgreSQL / MySQL (or any supported RDBMS)
+
+Esewa Payment Gateway integration
+
+Features
+User authentication with JWT tokens (login, signup, logout)
+
+Role-based access control for admin and normal users
+
+CRUD operations on Products, Orders, and Users
+
+Payment processing using Esewa integration
+
+Responsive admin dashboard UI with dynamic data fetching
+
+WebSocket support for real-time order updates (optional)
+
+Comprehensive error handling and validations
+
+Getting Started
+Prerequisites
+Node.js (v18+ recommended)
+
+Java 17 or higher
+
+Maven or Gradle for building Spring Boot backend
+
+PostgreSQL/MySQL database instance
+
+Esewa sandbox API credentials (for payment testing)
+
+Backend Setup
+Clone the repository and enter the backend folder:
+
+bash
+cd backend
+Configure application.properties or application.yml with your database credentials, JWT secret, and Esewa keys.
+
+Build and run the Spring Boot backend:
+/backend
+for backend go to  this repo
+GitHub: https://github.com/Abhishekkamat33/AgriTech-Website
+
+
+Frontend Setup
+Navigate to the frontend folder:
+
+bash
+cd frontend
+Install dependencies:
+
+bash
+npm install
+Create a .env.local file and specify the backend API URL:
+
+text
+NEXT_PUBLIC_BACKEND_URL=https://agritech-website.onrender.com
+Run the Next.js development server:
+
+bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Access the admin dashboard at http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Usage
+Register or login as an admin user.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Navigate through sidebar to manage products, orders, users, and payments.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Verify payment transactions via Esewa dashboard integration.
 
-## Learn More
+Monitor order statuses and updates in real-time (if WebSocket enabled).
 
-To learn more about Next.js, take a look at the following resources:
+Security
+JWT tokens used for stateless authentication.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+JWT tokens are stored securely in HTTP-only cookies (configurable).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+CSRF protection enabled on backend.
 
-## Deploy on Vercel
+CORS configured for safe cross-origin resource sharing between frontend and backend.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Payment Gateway Integration (Esewa)
+Integrated Esewa payment API for processing payments.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Supports Esewa sandbox environment for development/testing.
+Payment verification and status tracking implemented on backend.
+
+Folder Structure (simplified)
+text
+/backend
+for backend go to  this repo
+GitHub: https://github.com/Abhishekkamat33/AgriTech-Website
+
+ 
+
+/frontend
+  ├── components/
+  ├── pages/
+  ├── public/
+  ├── styles/
+  ├── .env.local
+  └── package.json
+Contributing
+If you want to contribute:
+
+Fork the repo
+
+Create a new branch for your feature or bug fix
+
+Submit a pull request with detailed description
+
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+Contact
+For questions or support:
+
+Project Maintainer: Abhishek kumar kamat - abhishekkamat33@gmail.com
+
+GitHub: https://github.com/Abhishekkamat33/AgriTech_admin_Dashboard
+
+
