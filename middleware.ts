@@ -4,7 +4,7 @@ import { jwtVerify } from 'jose';
 const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET!);
 
 const protectedPaths = ['/', '/dashboard', '/admin', '/profile']; // add your protected routes
-const publicPaths = ['/login', '/register', '/favicon.ico', '/api/public'];
+const publicPaths = ['/login', '/favicon.ico', '/api/public'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
