@@ -1,6 +1,6 @@
 import React from 'react';
-import { Order } from '../../type/index';
 import { X, MapPin, Calendar, User, Package } from 'lucide-react';
+import { Order } from '../../type/index';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -11,17 +11,18 @@ interface OrderModalProps {
 const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, order }) => {
   if (!isOpen || !order) return null;
 
+  // Normalize status to uppercase for consistent matching
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'delivered':
+    switch (status.toUpperCase()) {
+      case 'DELIVERED':
         return 'text-green-600 bg-green-100';
-      case 'processing':
+      case 'PROCESSING':
         return 'text-blue-600 bg-blue-100';
-      case 'shipped':
+      case 'SHIPPED':
         return 'text-purple-600 bg-purple-100';
-      case 'pending':
+      case 'PENDING':
         return 'text-yellow-600 bg-yellow-100';
-      case 'cancelled':
+      case 'CANCELLED':
         return 'text-red-600 bg-red-100';
       default:
         return 'text-gray-600 bg-gray-100';
@@ -35,11 +36,12 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, order }) => {
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Order Details</h2>
-            <p className="text-sm text-gray-500">{order.id}</p>
+            <p className="text-sm text-gray-500">{order.orderId}</p>
           </div>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+            aria-label="Close modal"
           >
             <X className="h-6 w-6" />
           </button>
@@ -64,11 +66,11 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, order }) => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Total:</span>
-                    <span className="font-medium">₹{order.total.toLocaleString()}</span>
+                    <span className="font-medium">₹{order.totalPrice.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Items:</span>
-                    <span>{order.items.length}</span>
+                    <span>{order.orderDetails.length}</span>
                   </div>
                 </div>
               </div>
@@ -79,11 +81,11 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, order }) => {
                   Order Date
                 </h3>
                 <p className="text-gray-600">
-                  {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                  {new Date(order.orderDate).toLocaleDateString('en-IN', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric'
+                    day: 'numeric',
                   })}
                 </p>
               </div>
@@ -113,7 +115,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, order }) => {
                   <MapPin className="h-4 w-4 mr-2" />
                   Shipping Address
                 </h3>
-                <p className="text-gray-600">{order.shippingAddress}</p>
+                <p className="text-gray-600">{order.shippingId /* or use shippingAddress if available */}</p>
               </div>
             </div>
           </div>
@@ -132,12 +134,12 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, order }) => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {order.items.map((item) => (
-                    <tr key={item.id}>
+                  {order.orderDetails.map((item) => (
+                    <tr key={item.orderDetailsId}>
                       <td className="px-4 py-3 text-sm text-gray-900">{item.productName}</td>
                       <td className="px-4 py-3 text-sm text-gray-600">{item.quantity}</td>
                       <td className="px-4 py-3 text-sm text-gray-600">₹{item.price.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-sm font-medium text-gray-900">₹{(item.quantity * item.price).toLocaleString()}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900">₹{(item.price * item.quantity).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>

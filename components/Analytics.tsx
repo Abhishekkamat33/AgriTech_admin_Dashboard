@@ -227,8 +227,8 @@ const AnalyticsDashboard: React.FC = () => {
         ]);
 
         setDashboardData(processBackendData(products, orders, users, payments));
-      } catch (error) {
-        console.error('Error fetching analytics data:', error);
+      } catch {
+        console.log('Error fetching analytics data:');
       } finally {
         setLoading(false);
       }
@@ -247,8 +247,6 @@ const AnalyticsDashboard: React.FC = () => {
 
   const {
     overview,
-    recentOrders,
-    productPerformance,
     userTypes,
     paymentMethods,
     salesTrend,

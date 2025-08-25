@@ -26,15 +26,15 @@ const token = document.cookie
         }
       });
       const data = await response.json();
-      console.log("Fetched products:", data);
+      // console.log("Fetched products:", data);
       setProducts(data);
       setIsFetch(false)
-    } catch (error) {
-      console.error('Error fetching products:', error);
+    } catch{
+      console.log('Error fetching products:');
     }
   };
   fetchProducts();
-  }, [isFetch]);
+  }, [isFetch,token]);
 
   const handleAddProduct = () => {
     setEditingProduct(undefined);
@@ -62,25 +62,25 @@ const token = document.cookie
     }
   };
 
-  const handleSaveProduct = (productData: Partial<Product>) => {
+  // const handleSaveProduct = (productData: Partial<Product>) => {
     
-    if (editingProduct) {
+  //   if (editingProduct) {
      
-      // Update existing product
-      setProducts(products?.map(p => 
-        p.productId === editingProduct.productId
-          ? { ...p, ...productData }
-          : p
-      ));
-    } else {
-      // Add new product
-      const newProduct: Product = {
-        createdAt: new Date().toISOString().split('T')[0],
-        ...productData as Omit<Product, 'id' | 'createdAt'>
-      };
-      setProducts([...products, newProduct]);
-    }
-  };
+  //     // Update existing product
+  //     setProducts(products?.map(p => 
+  //       p.productId === editingProduct.productId
+  //         ? { ...p, ...productData }
+  //         : p
+  //     ));
+  //   } else {
+  //     // Add new product
+  //     const newProduct: Product = {
+  //       createdAt: new Date().toISOString().split('T')[0],
+  //       ...productData as Omit<Product, 'id' | 'createdAt'>
+  //     };
+  //     setProducts([...products, newProduct]);
+  //   }
+  // };
 
   return (
     <div className="space-y-6">
@@ -100,7 +100,6 @@ const token = document.cookie
         isOpen={isModalOpen}
          setIsFetch={setIsFetch}   // pass the setter with clear name
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveProduct}
         product={editingProduct}
       />
     </div>

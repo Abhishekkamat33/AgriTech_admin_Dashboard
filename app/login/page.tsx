@@ -1,10 +1,9 @@
 // pages/login.tsx or app/login/page.tsx (for App Router)
 'use client';
 
-import { useState, ChangeEvent, FormEvent, use, useEffect } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, Leaf, ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 interface FormData {
   email: string;
@@ -25,15 +24,9 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const router = useRouter();
 
-  // useEffect(() => {
-  //   // Clear any previous errors when the component mounts
-  //   if(token) {
-  //     router.push('/'); // Redirect to home if already logged in
-  //   }
-  //   setErrors({});
-  // }, [token]);
+
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -94,7 +87,7 @@ export default function Login() {
       const data = await response.json();
    
 
-      console.log('Login response data:', data);
+      // console.log('Login response data:', data);
 
 
       if (!response.ok) {
@@ -113,8 +106,8 @@ export default function Login() {
       }
 
 
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch  {
+      console.log('Login error:');
       setErrors({ general: 'Login failed. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -291,7 +284,7 @@ export default function Login() {
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Donot have an account?{' '}
               <Link 
                 href="/register"
                 className="font-medium text-emerald-600 hover:text-emerald-500 transition-colors"

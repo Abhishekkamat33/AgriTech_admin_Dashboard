@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { Customer } from '../type/index';
-import { Eye, Search, Mail, Phone, Trash2, Edit2 } from 'lucide-react';
+import { Customer,Order } from '../type/index';
+import { Search, Mail, Phone, Trash2, Edit2 } from 'lucide-react';
 
 interface EditFormData {
   name: string;
@@ -46,7 +46,7 @@ const CustomerList: React.FC = () => {
       ?.split('=')[1];
 
     if (!token) {
-      console.error('No auth token found');
+      console.log('No auth token found');
       return;
     }
 
@@ -60,11 +60,11 @@ const CustomerList: React.FC = () => {
         },
       });
       if (!res.ok) {
-        console.error('Failed to fetch customers');
+        console.log('Failed to fetch customers');
         return;
       }
       const data: Customer[] = await res.json();
-      console.log("Fetched customers:", data);
+      // console.log("Fetched customers:", data);
       setCustomers(data);
     };
 
@@ -78,7 +78,7 @@ const CustomerList: React.FC = () => {
         },
       });
       if (!res.ok) {
-        console.error('Failed to fetch orders');
+        console.log('Failed to fetch orders');
         return;
       }
       const orders = await res.json();
@@ -86,14 +86,15 @@ const CustomerList: React.FC = () => {
 
       // Aggregate totals into customer objects
       const customerTotals: Record<string, { totalOrders: number; totalSpent: number }> = {};
-      orders.forEach((order: any) => {
-        const userId = order.userId;
-        if (!customerTotals[userId]) {
-          customerTotals[userId] = { totalOrders: 0, totalSpent: 0 };
-        }
-        customerTotals[userId].totalOrders += 1;
-        customerTotals[userId].totalSpent += order.totalPrice || 0;
-      });
+    orders.forEach((order: Order) => {
+  const userId = order.userId;
+  if (!customerTotals[userId]) {
+    customerTotals[userId] = { totalOrders: 0, totalSpent: 0 };
+  }
+  customerTotals[userId].totalOrders += 1;
+  customerTotals[userId].totalSpent += order.totalPrice || 0;
+});
+
 
       // Merge totals into customers state
       setCustomers(prev =>
@@ -131,8 +132,8 @@ const CustomerList: React.FC = () => {
         return;
       }
       setCustomers(customers.filter(c => c.userId !== userId));
-    } catch (error) {
-      console.error('Error deleting customer:', error);
+    } catch{
+      console.log('Error deleting customer');
     }
   };
 
@@ -196,12 +197,10 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>)
 
       setShowEditModal(false);
       setSelectedCustomer(null);
-    } catch (error) {
-      console.error('Error updating customer:', error);
-      alert('Failed to update customer');
+    } catch {
+      console.log('Error updating customer');
     }
   };
-const userTypeOptions = ['FARMER', 'ADMIN', 'CUSTOMER', 'GUEST'];
   return (
     <>
       <div className="bg-white rounded-xl shadow-md">

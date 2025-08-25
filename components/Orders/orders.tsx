@@ -87,9 +87,10 @@ const OrdersPage: React.FC = () => {
         const data: Order[] = await response.json();
         console.log("Fetched orders:", data);
         setOrders(data);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-      } finally {
+      } catch {
+        console.log('Error fetching orders:');
+      }
+        finally {
         setLoading(false);
       }
     }

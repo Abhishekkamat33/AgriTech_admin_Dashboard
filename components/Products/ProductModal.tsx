@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Upload, Plus, Edit2, Trash2 } from 'lucide-react';
+import { X, Edit2, Trash2 } from 'lucide-react';
 import { Product } from '@/type';
 // import getTokenFromCookie from '@/app/fetch_token';
 
@@ -25,12 +25,11 @@ interface Manufacturer {
 interface ProductModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (product: Partial<Product>) => void;
     product?: Product;
     setIsFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, product, setIsFetch }) => {
+const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, setIsFetch }) => {
     const [activeTab, setActiveTab] = useState<'product' | 'category' | 'manufacturer'>('product');
     const [file, setFile] = useState<File | null>(null);
     const [isSubmit, setIsSubmit] = useState(false);
@@ -113,8 +112,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 const data = await response.json();
                 console.log("Fetched categories:", data);
                 setCategories(data);
-            } catch (error) {
-                console.error('Error fetching categories:', error);
+            } catch{
+                console.log('Error fetching categories:');
             }
         };
 
@@ -130,8 +129,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 const data = await response.json();
                 console.log("Fetched manufacturers:", data);
                 setManufacturers(data);
-            } catch (error) {
-                console.error('Error fetching manufacturers:', error);
+            } catch{
+                console.log('Error fetching manufacturers:');
             }
         };
 
@@ -139,7 +138,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
             fetchCategories();
             fetchManufacturers();
         }
-    }, [isOpen]);
+    }, [isOpen, token]);
 
 
     const handleProductSubmit = async () => {
@@ -227,14 +226,15 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 onClose();
             } else {
                 const errorData = await response.json();
-                console.error('Error response:', errorData);
+                console.log('Error response:', errorData);
                 // जरूरत अनुसार यूज़र को error संदेश दिखाएं
             }
-        } catch (error) {
-            console.error('Error saving product:', error);
-            // error handling UI में दिखाएं
+        } catch {
+            console.log('Error submitting product:');
+            // console.error('Error submitting product:', error);
         }
     };
+
 
 
     const handleCategorySubmit = async () => {
@@ -268,8 +268,9 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 setCategoryForm({ categoryName: '', description: '', status: 'ACTIVE' });
                 setEditingCategory(null);
             }
-        } catch (error) {
-            console.error('Error saving category:', error);
+        } catch {
+            console.log('Error saving category:');
+         
         }
     };
 
@@ -304,8 +305,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 setManufacturerForm({ name: '', contactInfo: '', description: '', status: 'ACTIVE' });
                 setEditingManufacturer(null);
             }
-        } catch (error) {
-            console.error('Error saving manufacturer:', error);
+        } catch{
+            console.log('Error saving manufacturer:');
         }
     };
 
@@ -341,8 +342,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 if (response.ok) {
                     setCategories(categories.filter(cat => cat.categoryId !== categoryId));
                 }
-            } catch (error) {
-                console.error('Error deleting category:', error);
+            } catch {
+                console.log('Error deleting category:');
             }
         }
     };
@@ -360,8 +361,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                 if (response.ok) {
                     setManufacturers(manufacturers.filter(mfg => mfg.manufacturerId !== manufacturerId));
                 }
-            } catch (error) {
-                console.error('Error deleting manufacturer:', error);
+            } catch {
+                console.log('Error deleting manufacturer:');
             }
         }
     };
