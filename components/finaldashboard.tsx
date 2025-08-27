@@ -28,6 +28,7 @@ interface Category {
 
 interface Product {
   category?: Category;
+  categoryId?: string;  
 }
 
 interface User {
@@ -39,7 +40,8 @@ interface Payment {
   paymentMethod?: string;
   paymentStatus?: string;
   amount?: number;
-  createdAt?: string;
+ paymentDate?: string;
+
 }
 
 interface Order {
@@ -66,6 +68,9 @@ const EnhancedAnalyticsDashboard: React.FC = () => {
     paymentMethod: 'all',
     status: 'all',
   });
+
+  const [categoryDistribution, setCategoryDistribution] = useState<{name: string; value: number}[]>([])
+  const [loadingCategories, setLoadingCategories] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -111,6 +116,7 @@ const EnhancedAnalyticsDashboard: React.FC = () => {
     fetchData();
   }, []);
 
+
   const filteredData = useMemo(() => {
     if (!dashboardData) return null;
 
@@ -127,20 +133,56 @@ const EnhancedAnalyticsDashboard: React.FC = () => {
     return { ...dashboardData, products, users, payments, orders };
   }, [dashboardData, filters]);
 
-  const getCategoryDistribution = () => {
-    if (!filteredData) return [];
+
+  useEffect(() => {
+  const fetchCategoryDistribution = async () => {
+    if (!filteredData) {
+      setCategoryDistribution([]);
+      return;
+    }
+    setLoadingCategories(true);
     const counts: Record<string, number> = {};
-    filteredData.products.forEach(product => {
-      const cat = product.category?.categoryName || 'Uncategorized';
-      counts[cat] = (counts[cat] || 0) + 1;
-    });
-    return Object.entries(counts).map(([name, value]) => ({ name, value }));
+
+    try {
+      const authToken = typeof document !== 'undefined'
+        ? document.cookie.split('; ').find(row => row.startsWith('authToken='))?.split('=')[1]
+        : '';
+
+      const fetchPromises = filteredData.products.map(async (product) => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories/${product.categoryId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+        const categoryData = await res.json();
+        return categoryData?.categoryName || 'Uncategorized';
+      });
+
+      const categories = await Promise.all(fetchPromises);
+
+      categories.forEach(cat => {
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+
+      setCategoryDistribution(Object.entries(counts).map(([name, value]) => ({ name, value })));
+    } catch (error) {
+      console.error('Failed to fetch category distribution:', error);
+      setCategoryDistribution([]);
+    } finally {
+      setLoadingCategories(false);
+    }
   };
+
+  fetchCategoryDistribution();
+}, [filteredData]);
 
   const getOrderStatusDistribution = () => {
     if (!filteredData) return [];
     const counts: Record<string, number> = {};
     filteredData.orders.forEach(order => {
+      console.log(order);
       if (!order.status) return;
       counts[order.status] = (counts[order.status] || 0) + 1;
     });
@@ -173,8 +215,8 @@ const EnhancedAnalyticsDashboard: React.FC = () => {
     filteredData.payments
       .filter(p => p.paymentStatus === 'COMPLETED')
       .forEach(payment => {
-        if (!payment.createdAt) return;
-        const date = new Date(payment.createdAt);
+        if (!payment.paymentDate) return;
+        const date = new Date(payment.paymentDate);
         const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         monthlyData[key] = (monthlyData[key] || 0) + (payment.amount || 0);
       });
@@ -342,22 +384,26 @@ const EnhancedAnalyticsDashboard: React.FC = () => {
 
           <ChartCard title="Product Categories" icon={Package}>
             <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={getCategoryDistribution()}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ name, percent }) => `${name} ${percent !== undefined ? (percent * 100).toFixed(0) + '%' : ''}`}
-                >
-                  {getCategoryDistribution().map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
+             {loadingCategories ? (
+  <p>Loading categories...</p>
+) : (
+  <PieChart>
+    <Pie
+      data={categoryDistribution}
+      cx="50%"
+      cy="50%"
+      outerRadius={100}
+      fill="#8884d8"
+      dataKey="value"
+      label={({ name, percent }) => `${name} ${(percent ?? 0) * 100}%`}
+    >
+      {categoryDistribution.map((entry, index) => (
+        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+      ))}
+    </Pie>
+    <Tooltip />
+  </PieChart>
+)}
             </ResponsiveContainer>
           </ChartCard>
         </div>

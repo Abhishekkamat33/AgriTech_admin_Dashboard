@@ -22,6 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
     { id: 'orders', label: 'Orders', icon: ShoppingCart },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'inventory', label: 'InventoryLab', icon: Package },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 

@@ -72,3 +72,94 @@ export interface DashboardStats {
   customersGrowth: number;
   productsGrowth: number;
 }
+
+
+
+// types/inventory.ts
+export interface InventoryItem {
+  id: string;
+  name: string;
+  description?: string;
+  category: 'seeds' | 'fertilizers' | 'pesticides' | 'equipment' | 'tools' | 'irrigation' | 'organic' | 'chemicals';
+  subcategory?: string;
+  sku: string;
+  barcode?: string;
+  quantity: number;
+  reservedQuantity: number;
+  minStock: number;
+  maxStock: number;
+  reorderPoint: number;
+  unit: string;
+  costPrice: number;
+  sellingPrice: number;
+  supplier: string;
+  supplierSku?: string;
+  location: string;
+  zone?: string;
+  shelf?: string;
+  expiryDate?: string;
+  manufacturedDate?: string;
+  batchNumber?: string;
+  lotNumber?: string;
+  status: 'in-stock' | 'low-stock' | 'out-of-stock' | 'expired' | 'damaged' | 'reserved';
+  condition: 'new' | 'good' | 'fair' | 'poor' | 'damaged';
+  tags?: string[];
+  notes?: string;
+  images?: string[];
+  weight?: number;
+  dimensions?: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  temperature?: {
+    min: number;
+    max: number;
+  };
+  humidity?: {
+    min: number;
+    max: number;
+  };
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  lastModifiedBy: string;
+}
+
+export interface StockMovement {
+  id: string;
+  itemId: string;
+  type: 'in' | 'out' | 'adjustment' | 'transfer' | 'damaged' | 'expired';
+  quantity: number;
+  reference?: string;
+  notes?: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+export interface InventoryFilters {
+  category?: string;
+  subcategory?: string;
+  status?: string;
+  condition?: string;
+  supplier?: string;
+  location?: string;
+  search?: string;
+  expiringInDays?: number;
+  priceRange?: { min: number; max: number };
+  tags?: string[];
+}
+
+export interface InventoryStats {
+  totalItems: number;
+  totalValue: number;
+  totalCostValue: number;
+  lowStockItems: number;
+  outOfStockItems: number;
+  expiringSoon: number;
+  expiredItems: number;
+  damagedItems: number;
+  categories: Record<string, { count: number; value: number }>;
+  topSuppliers: { name: string; items: number; value: number }[];
+  recentMovements: StockMovement[];
+}

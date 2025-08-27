@@ -35,7 +35,8 @@ async function fetchProductById(productId: number) {
     },
   });
   if (!res.ok) throw new Error('Product fetch failed');
-  return await res.json(); // {name}
+  const product = await res.json(); // {name}
+  return product;
 }
 
 
@@ -105,6 +106,7 @@ const OrdersPage: React.FC = () => {
 
 
 
+  console.log("Orders state:", orders);
 
   const handleViewOrder = (order: Order) => {
     setSelectedOrder(order);

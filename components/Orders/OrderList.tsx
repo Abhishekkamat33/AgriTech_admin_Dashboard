@@ -42,6 +42,9 @@ const OrderList: React.FC<OrderListProps> = ({
             transactionId: '',
             amount: 0,
           }));
+
+
+          console.log('Order:', order);
           const enrichedDetails = await Promise.all(
             order.orderDetails.map(async (item) => {
               const product = await fetchProductById(item.productId).catch(() => ({ name: 'Unknown Product' }));
