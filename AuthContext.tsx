@@ -11,6 +11,12 @@ interface AuthContextType {
   logout: () => void;
 }
 
+interface JwtPayload {
+  roles?: string[] | string;
+  // Add other expected JWT fields here if needed
+}
+
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
@@ -28,9 +34,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (storedToken) {
       setToken(storedToken);
       try {
-        const payload: any = jwtDecode(storedToken);
+        const payload: JwtPayload = jwtDecode(storedToken);
         const roles = Array.isArray(payload.roles) ? payload.roles : [payload.roles];
-        setIsAdmin(roles.some((r: string) => r.toLowerCase() === 'admin'));
+        setIsAdmin(roles.some((r) => r?.toLowerCase() === 'admin'));
       } catch {
         setToken(null);
         setIsAdmin(false);
@@ -49,9 +55,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem('authToken', newToken);
     setToken(newToken);
     try {
-      const payload: any = jwtDecode(newToken);
+      const payload : JwtPayload  = jwtDecode(newToken);
       const roles = Array.isArray(payload.roles) ? payload.roles : [payload.roles];
-      setIsAdmin(roles.some((r: string) => r.toLowerCase() === 'admin'));
+      setIsAdmin(roles.some((r) => r?.toLowerCase() === 'admin'));
     } catch {
       setIsAdmin(false);
     }

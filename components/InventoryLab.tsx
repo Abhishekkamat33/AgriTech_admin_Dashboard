@@ -1,15 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, Plus, Filter, Download, Upload, AlertTriangle, Package, 
-  TrendingUp, DollarSign, Clock, Grid3X3, List, BarChart3, 
-  Truck, MapPin, Calendar, Tag, Eye, Edit2, Trash2, MoreVertical,
+import {
+  Search, Plus, Filter, Download, Upload, AlertTriangle, Package, DollarSign, Clock, Grid3X3, List, BarChart3,
+  Truck, MapPin, Tag, Eye, Edit2, Trash2, MoreVertical,
   ScanLine, Bell, Settings, RefreshCw, Archive, X, Check,
-  ChevronDown, ChevronRight, Star, AlertCircle
+  ChevronDown, Star,
 } from 'lucide-react';
 
-import { InventoryFilters, InventoryItem,InventoryStats} from '../type/index';
+import { InventoryFilters, InventoryItem, InventoryStats } from '../type/index';
 
 
 
@@ -22,6 +21,7 @@ interface StockMovement {
   date?: string;
   user?: string;
 }
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -118,11 +118,11 @@ const AddItemModal: React.FC<{
               <X className="w-6 h-6" />
             </button>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="mt-4">
             <div className="bg-green-500 bg-opacity-30 rounded-full h-2">
-              <div 
+              <div
                 className="bg-white h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(currentStep / totalSteps) * 100}%` }}
               />
@@ -137,7 +137,7 @@ const AddItemModal: React.FC<{
             {currentStep === 1 && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Item Name *</label>
@@ -146,7 +146,7 @@ const AddItemModal: React.FC<{
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Enter item name"
                     />
                   </div>
@@ -158,7 +158,7 @@ const AddItemModal: React.FC<{
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.sku}
-                      onChange={(e) => setFormData({...formData, sku: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                       placeholder="Stock Keeping Unit"
                     />
                   </div>
@@ -169,7 +169,7 @@ const AddItemModal: React.FC<{
                       rows={3}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.description}
-                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Detailed description of the item"
                     />
                   </div>
@@ -180,7 +180,7 @@ const AddItemModal: React.FC<{
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.category}
-                      onChange={(e) => setFormData({...formData, category: e.target.value as any})}
+                      onChange={(e) => setFormData({ ...formData, condition: e.target.value as 'new' | 'good' | 'fair' | 'poor' | 'damaged' })}
                     >
                       {categoryOptions.map(cat => (
                         <option key={cat.value} value={cat.value}>
@@ -197,7 +197,7 @@ const AddItemModal: React.FC<{
                         type="text"
                         className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         value={formData.barcode}
-                        onChange={(e) => setFormData({...formData, barcode: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
                         placeholder="Scan or enter barcode"
                       />
                       <ScanLine className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -211,7 +211,7 @@ const AddItemModal: React.FC<{
             {currentStep === 2 && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Stock & Pricing Information</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Current Quantity *</label>
@@ -222,7 +222,7 @@ const AddItemModal: React.FC<{
                       step="0.01"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.quantity}
-                      onChange={(e) => setFormData({...formData, quantity: parseFloat(e.target.value) || 0})}
+                      onChange={(e) => setFormData({ ...formData, quantity: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
 
@@ -232,7 +232,7 @@ const AddItemModal: React.FC<{
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.unit}
-                      onChange={(e) => setFormData({...formData, unit: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
                     >
                       {unitOptions.map(unit => (
                         <option key={unit} value={unit}>{unit}</option>
@@ -245,7 +245,7 @@ const AddItemModal: React.FC<{
                     <select
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.condition}
-                      onChange={(e) => setFormData({...formData, condition: e.target.value as any})}
+                      onChange={(e) => setFormData({ ...formData, condition: e.target.value as 'new' | 'good' | 'fair' | 'poor' | 'damaged' })}
                     >
                       <option value="new">New</option>
                       <option value="good">Good</option>
@@ -263,7 +263,7 @@ const AddItemModal: React.FC<{
                       step="0.01"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.minStock}
-                      onChange={(e) => setFormData({...formData, minStock: parseFloat(e.target.value) || 0})}
+                      onChange={(e) => setFormData({ ...formData, minStock: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
 
@@ -275,7 +275,7 @@ const AddItemModal: React.FC<{
                       step="0.01"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.maxStock}
-                      onChange={(e) => setFormData({...formData, maxStock: parseFloat(e.target.value) || 0})}
+                      onChange={(e) => setFormData({ ...formData, maxStock: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
 
@@ -287,7 +287,7 @@ const AddItemModal: React.FC<{
                       step="0.01"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.reorderPoint}
-                      onChange={(e) => setFormData({...formData, reorderPoint: parseFloat(e.target.value) || 0})}
+                      onChange={(e) => setFormData({ ...formData, reorderPoint: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
 
@@ -299,7 +299,7 @@ const AddItemModal: React.FC<{
                       step="0.01"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.costPrice}
-                      onChange={(e) => setFormData({...formData, costPrice: parseFloat(e.target.value) || 0})}
+                      onChange={(e) => setFormData({ ...formData, costPrice: parseFloat(e.target.value) || 0 })}
                       placeholder="0.00"
                     />
                   </div>
@@ -312,7 +312,7 @@ const AddItemModal: React.FC<{
                       step="0.01"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.sellingPrice}
-                      onChange={(e) => setFormData({...formData, sellingPrice: parseFloat(e.target.value) || 0})}
+                      onChange={(e) => setFormData({ ...formData, sellingPrice: parseFloat(e.target.value) || 0 })}
                       placeholder="0.00"
                     />
                   </div>
@@ -323,7 +323,7 @@ const AddItemModal: React.FC<{
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="text-sm text-green-800">
                       <strong>Profit Margin: </strong>
-                      ${(formData.sellingPrice! - formData.costPrice!).toFixed(2)} 
+                      ${(formData.sellingPrice! - formData.costPrice!).toFixed(2)}
                       ({(((formData.sellingPrice! - formData.costPrice!) / formData.costPrice!) * 100).toFixed(1)}%)
                     </div>
                   </div>
@@ -335,7 +335,7 @@ const AddItemModal: React.FC<{
             {currentStep === 3 && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Location & Supplier Details</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Supplier *</label>
@@ -344,7 +344,7 @@ const AddItemModal: React.FC<{
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.supplier}
-                      onChange={(e) => setFormData({...formData, supplier: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
                       placeholder="Supplier name"
                     />
                   </div>
@@ -356,7 +356,7 @@ const AddItemModal: React.FC<{
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.location}
-                      onChange={(e) => setFormData({...formData, location: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       placeholder="e.g., Warehouse A, Section B, Shelf 3"
                     />
                   </div>
@@ -367,7 +367,7 @@ const AddItemModal: React.FC<{
                       type="text"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.batchNumber}
-                      onChange={(e) => setFormData({...formData, batchNumber: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, batchNumber: e.target.value })}
                       placeholder="Batch/Lot number"
                     />
                   </div>
@@ -378,7 +378,7 @@ const AddItemModal: React.FC<{
                       type="date"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.expiryDate}
-                      onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
                     />
                   </div>
 
@@ -388,7 +388,7 @@ const AddItemModal: React.FC<{
                       type="date"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.manufacturedDate}
-                      onChange={(e) => setFormData({...formData, manufacturedDate: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, manufacturedDate: e.target.value })}
                     />
                   </div>
                 </div>
@@ -399,7 +399,7 @@ const AddItemModal: React.FC<{
             {currentStep === 4 && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
-                
+
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
@@ -409,7 +409,7 @@ const AddItemModal: React.FC<{
                       placeholder="Add tags separated by commas"
                       onChange={(e) => {
                         const tags = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
-                        setFormData({...formData, tags});
+                        setFormData({ ...formData, tags });
                       }}
                     />
                     <p className="text-sm text-gray-500 mt-1">e.g., organic, premium, seasonal</p>
@@ -421,7 +421,7 @@ const AddItemModal: React.FC<{
                       rows={4}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       value={formData.notes}
-                      onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                       placeholder="Additional notes or special instructions"
                     />
                   </div>
@@ -532,7 +532,7 @@ const StockMovementModal: React.FC<{
               <select
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 value={movementData.type}
-                onChange={(e) => setMovementData({...movementData, type: e.target.value as any})}
+                onChange={(e) => setMovementData({ ...movementData, type: e.target.value as 'in' | 'out' | 'adjustment' })}
               >
                 <option value="in">Stock In</option>
                 <option value="out">Stock Out</option>
@@ -548,7 +548,7 @@ const StockMovementModal: React.FC<{
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 value={movementData.quantity}
-                onChange={(e) => setMovementData({...movementData, quantity: parseFloat(e.target.value) || 0})}
+                onChange={(e) => setMovementData({ ...movementData, quantity: parseFloat(e.target.value) || 0 })}
               />
             </div>
 
@@ -558,7 +558,7 @@ const StockMovementModal: React.FC<{
                 type="text"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 value={movementData.reference}
-                onChange={(e) => setMovementData({...movementData, reference: e.target.value})}
+                onChange={(e) => setMovementData({ ...movementData, reference: e.target.value })}
                 placeholder="PO#, Invoice#, etc."
               />
             </div>
@@ -569,7 +569,7 @@ const StockMovementModal: React.FC<{
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 value={movementData.notes}
-                onChange={(e) => setMovementData({...movementData, notes: e.target.value})}
+                onChange={(e) => setMovementData({ ...movementData, notes: e.target.value })}
                 placeholder="Additional notes..."
               />
             </div>
@@ -579,11 +579,11 @@ const StockMovementModal: React.FC<{
               <div className="text-sm">
                 <span className="text-gray-600">New Stock Level: </span>
                 <span className="font-medium">
-                  {movementData.type === 'in' 
+                  {movementData.type === 'in'
                     ? item.quantity + movementData.quantity
                     : movementData.type === 'out'
-                    ? Math.max(0, item.quantity - movementData.quantity)
-                    : movementData.quantity
+                      ? Math.max(0, item.quantity - movementData.quantity)
+                      : movementData.quantity
                   } {item.unit}
                 </span>
               </div>
@@ -654,7 +654,7 @@ const InventoryDashboard: React.FC = () => {
 
       const response = await fetch(`${API_BASE_URL}/inventory?${queryParams}`);
       if (!response.ok) throw new Error('Failed to fetch inventory');
-      
+
       const data = await response.json();
       setItems(data.items || []);
     } catch (error) {
@@ -668,7 +668,7 @@ const InventoryDashboard: React.FC = () => {
     try {
       const response = await fetch(`${API_BASE_URL}/inventory/stats`);
       if (!response.ok) throw new Error('Failed to fetch stats');
-      
+
       const data = await response.json();
       setStats(data);
     } catch (error) {
@@ -683,9 +683,9 @@ const InventoryDashboard: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newItem),
       });
-      
+
       if (!response.ok) throw new Error('Failed to add item');
-      
+
       fetchInventoryData();
       fetchInventoryStats();
     } catch (error) {
@@ -700,9 +700,9 @@ const InventoryDashboard: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(movement),
       });
-      
+
       if (!response.ok) throw new Error('Failed to update stock');
-      
+
       fetchInventoryData();
       fetchInventoryStats();
     } catch (error) {
@@ -712,14 +712,14 @@ const InventoryDashboard: React.FC = () => {
 
   const handleDeleteItems = async (ids: string[]) => {
     if (!confirm(`Are you sure you want to delete ${ids.length} item(s)?`)) return;
-    
+
     try {
       await Promise.all(
         ids.map(id =>
           fetch(`${API_BASE_URL}/inventory/${id}`, { method: 'DELETE' })
         )
       );
-      
+
       setSelectedItems([]);
       fetchInventoryData();
       fetchInventoryStats();
@@ -735,9 +735,9 @@ const InventoryDashboard: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filters, selectedItems })
       });
-      
+
       if (!response.ok) throw new Error('Export failed');
-      
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -834,7 +834,7 @@ const InventoryDashboard: React.FC = () => {
                 <p className="text-gray-600 mt-1">Professional Agricultural Inventory Management</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
                 <Bell className="w-5 h-5" />
@@ -848,7 +848,7 @@ const InventoryDashboard: React.FC = () => {
               >
                 {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid3X3 className="w-4 h-4" />}
               </button>
-              
+
               <div className="hidden md:flex items-center space-x-2">
                 <button
                   onClick={handleExport}
@@ -862,7 +862,7 @@ const InventoryDashboard: React.FC = () => {
                   Import
                 </button>
               </div>
-              
+
               <button
                 onClick={() => setShowAddModal(true)}
                 className="flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
@@ -953,7 +953,7 @@ const InventoryDashboard: React.FC = () => {
                     <div className="text-right">
                       <p className="font-semibold text-gray-900">{formatCurrency(data.value)}</p>
                       <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
-                        <div 
+                        <div
                           className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${Math.min((data.value / stats.totalValue) * 100, 100)}%` }}
                         />
@@ -973,12 +973,11 @@ const InventoryDashboard: React.FC = () => {
                 {stats.topSuppliers.slice(0, 5).map((supplier, index) => (
                   <div key={supplier.name} className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                        index === 0 ? 'bg-yellow-100 text-yellow-800' :
-                        index === 1 ? 'bg-gray-100 text-gray-800' :
-                        index === 2 ? 'bg-orange-100 text-orange-800' :
-                        'bg-blue-100 text-blue-800'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${index === 0 ? 'bg-yellow-100 text-yellow-800' :
+                          index === 1 ? 'bg-gray-100 text-gray-800' :
+                            index === 2 ? 'bg-orange-100 text-orange-800' :
+                              'bg-blue-100 text-blue-800'
+                        }`}>
                         {index + 1}
                       </div>
                       <div>
@@ -1007,17 +1006,16 @@ const InventoryDashboard: React.FC = () => {
                   placeholder="Search inventory items, SKU, or barcode..."
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
                   value={filters.search || ''}
-                  onChange={(e) => setFilters({...filters, search: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 />
               </div>
             </div>
-            
+
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center px-4 py-3 border rounded-xl transition-colors ${
-                  showFilters ? 'bg-green-50 border-green-200 text-green-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
+                className={`flex items-center px-4 py-3 border rounded-xl transition-colors ${showFilters ? 'bg-green-50 border-green-200 text-green-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -1028,9 +1026,9 @@ const InventoryDashboard: React.FC = () => {
                 className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
                 value={`${sortBy}-${sortOrder}`}
                 onChange={(e) => {
-                  const [field, order] = e.target.value.split('-');
-                  setSortBy(field as any);
-                  setSortOrder(order as any);
+                  const [field, order] = e.target.value.split('-') as ['name' | 'quantity' | 'price' | 'updated', 'asc' | 'desc'];
+                  setSortBy(field);
+                  setSortOrder(order);
                 }}
               >
                 <option value="updated-desc">Recently Updated</option>
@@ -1069,7 +1067,7 @@ const InventoryDashboard: React.FC = () => {
                 <select
                   className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   value={filters.category || ''}
-                  onChange={(e) => setFilters({...filters, category: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, category: e.target.value })}
                 >
                   <option value="">All Categories</option>
                   <option value="seeds">🌱 Seeds & Saplings</option>
@@ -1085,7 +1083,7 @@ const InventoryDashboard: React.FC = () => {
                 <select
                   className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   value={filters.status || ''}
-                  onChange={(e) => setFilters({...filters, status: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                 >
                   <option value="">All Status</option>
                   <option value="in-stock">✅ In Stock</option>
@@ -1099,7 +1097,7 @@ const InventoryDashboard: React.FC = () => {
                 <select
                   className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   value={filters.condition || ''}
-                  onChange={(e) => setFilters({...filters, condition: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, condition: e.target.value })}
                 >
                   <option value="">All Conditions</option>
                   <option value="new">New</option>
@@ -1114,7 +1112,7 @@ const InventoryDashboard: React.FC = () => {
                   placeholder="Filter by supplier..."
                   className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500"
                   value={filters.supplier || ''}
-                  onChange={(e) => setFilters({...filters, supplier: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, supplier: e.target.value })}
                 />
               </div>
             </div>
@@ -1238,11 +1236,10 @@ const InventoryDashboard: React.FC = () => {
                             </div>
                           )}
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div 
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                item.quantity <= item.minStock ? 'bg-red-500' :
-                                item.quantity <= item.reorderPoint ? 'bg-amber-500' : 'bg-green-500'
-                              }`}
+                            <div
+                              className={`h-2 rounded-full transition-all duration-300 ${item.quantity <= item.minStock ? 'bg-red-500' :
+                                  item.quantity <= item.reorderPoint ? 'bg-amber-500' : 'bg-green-500'
+                                }`}
                               style={{ width: `${Math.min((item.quantity / item.maxStock) * 100, 100)}%` }}
                             />
                           </div>
@@ -1296,14 +1293,14 @@ const InventoryDashboard: React.FC = () => {
                             <RefreshCw className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => {/* Handle view details */}}
+                            onClick={() => {/* Handle view details */ }}
                             className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
                             title="View Details"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => {/* Handle edit */}}
+                            onClick={() => {/* Handle edit */ }}
                             className="p-2 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-lg transition-colors"
                             title="Edit Item"
                           >
@@ -1362,7 +1359,7 @@ const InventoryDashboard: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="mb-4">
                     <h3 className="font-semibold text-gray-900 mb-1 truncate">{item.name}</h3>
                     <p className="text-sm text-gray-500 mb-2">SKU: {item.sku}</p>
@@ -1370,28 +1367,27 @@ const InventoryDashboard: React.FC = () => {
                       <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
                     )}
                   </div>
-                  
+
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Stock:</span>
                       <span className="font-medium text-gray-900">{item.quantity} {item.unit}</span>
                     </div>
-                    
+
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          item.quantity <= item.minStock ? 'bg-red-500' :
-                          item.quantity <= item.reorderPoint ? 'bg-amber-500' : 'bg-green-500'
-                        }`}
+                      <div
+                        className={`h-2 rounded-full transition-all duration-300 ${item.quantity <= item.minStock ? 'bg-red-500' :
+                            item.quantity <= item.reorderPoint ? 'bg-amber-500' : 'bg-green-500'
+                          }`}
                         style={{ width: `${Math.min((item.quantity / item.maxStock) * 100, 100)}%` }}
                       />
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Price:</span>
                       <span className="font-semibold text-gray-900">{formatCurrency(item.sellingPrice)}</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className={`px-2 py-1 text-xs rounded-full font-medium border ${getStatusColor(item.status)}`}>
                         {item.status.replace('-', ' ')}
@@ -1402,7 +1398,7 @@ const InventoryDashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex space-x-2">
                     <button
                       onClick={() => {
@@ -1414,7 +1410,7 @@ const InventoryDashboard: React.FC = () => {
                       Stock
                     </button>
                     <button
-                      onClick={() => {/* Handle edit */}}
+                      onClick={() => {/* Handle edit */ }}
                       className="flex-1 px-3 py-2 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
                       Edit
@@ -1446,7 +1442,7 @@ const InventoryDashboard: React.FC = () => {
                   >
                     Previous
                   </button>
-                  
+
                   <div className="flex items-center space-x-1">
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                       let pageNum;
@@ -1459,23 +1455,22 @@ const InventoryDashboard: React.FC = () => {
                       } else {
                         pageNum = currentPage - 2 + i;
                       }
-                      
+
                       return (
                         <button
                           key={pageNum}
                           onClick={() => setCurrentPage(pageNum)}
-                          className={`px-3 py-2 text-sm rounded-lg transition-colors ${
-                            currentPage === pageNum
+                          className={`px-3 py-2 text-sm rounded-lg transition-colors ${currentPage === pageNum
                               ? 'bg-green-600 text-white'
                               : 'border border-gray-300 hover:bg-gray-50'
-                          }`}
+                            }`}
                         >
                           {pageNum}
                         </button>
                       );
                     })}
                   </div>
-                  
+
                   <button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
